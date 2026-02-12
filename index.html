@@ -14,9 +14,9 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--light); margin: 0; padding: 15px; }
         .container { max-width: 650px; background: white; margin: auto; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         
-        /* Encabezado con Logo del Repositorio */
-        .header { text-align: center; border-bottom: 3px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px; position: relative; }
-        .logo-principal { width: 120px; height: auto; margin-bottom: 10px; }
+        /* Encabezado */
+        .header { text-align: center; border-bottom: 3px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px; }
+        .logo-principal { width: 130px; height: auto; margin-bottom: 10px; border-radius: 50%; }
         
         h2 { color: var(--primary); margin: 5px 0; letter-spacing: 1px; }
         .info-contacto { font-size: 0.9em; color: #555; margin-bottom: 10px; }
@@ -29,55 +29,57 @@
         
         /* Tabla de Productos */
         .product-list { margin-top: 15px; }
-        .product-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; font-weight: bold; background: var(--primary); color: white; padding: 10px; border-radius: 8px 8px 0 0; font-size: 0.8em; text-align: center; }
+        .product-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; font-weight: bold; background: var(--primary); color: white; padding: 10px; border-radius: 8px 8px 0 0; font-size: 0.75em; text-align: center; }
         .product-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; align-items: center; padding: 12px 5px; border-bottom: 1px solid #eee; text-align: center; }
         .product-name { text-align: left; font-weight: 600; font-size: 0.9em; }
-        .qty-input { text-align: center; padding: 8px; border: 2px solid var(--primary); font-weight: bold; color: var(--primary); }
+        .qty-input { text-align: center; padding: 8px; border: 2px solid var(--primary); font-weight: bold; border-radius: 5px; }
 
         /* Totales y Botón */
         .total-box { background: #fdf2d0; padding: 20px; border-radius: 10px; margin-top: 25px; text-align: right; border: 1px solid var(--accent); }
         .grand-total { font-size: 1.4em; color: #d32f2f; }
-        .btn-whatsapp { background: var(--secondary); color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; font-size: 1.2em; cursor: pointer; font-weight: bold; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
-        .btn-whatsapp:hover { background: #1eb954; transform: scale(1.02); }
+        .btn-whatsapp { background: var(--secondary); color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; font-size: 1.2em; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.3s; }
+        .btn-whatsapp:hover { background: #1eb954; transform: scale(1.01); }
 
         /* Suscripción y Footer */
-        #exp-notice { display: none; background: #ffebee; color: #c62828; padding: 20px; border-radius: 10px; text-align: center; font-weight: bold; border: 2px solid #c62828; }
-        .footer { text-align: center; font-size: 0.75em; color: #888; margin-top: 30px; line-height: 1.6; }
-        .vibras-tag { color: var(--primary); font-weight: bold; }
+        #exp-notice { display: none; background: #ffebee; color: #c62828; padding: 25px; border-radius: 10px; text-align: center; font-weight: bold; border: 2px solid #c62828; }
+        .footer { text-align: center; font-size: 0.8em; color: #777; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <img src="arepas-campesinas-oli.png" alt="Logo Oli" class="logo-principal">
+        <img src="arepas-campesinas-oli.png" alt="Logo Arepas Oli" class="logo-principal">
         <h2>AREPAS CAMPESINAS OLI</h2>
         <div class="info-contacto">📍 Caucasia, Antioquia | 📱 3135370683</div>
-        <div style="background: #eee; display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.85em;">
-            <strong>Pedido N°:</strong> <span id="num-pedido">---</span>
+        <div style="background: #f0f0f0; display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.85em; font-weight: bold;">
+            Pedido N°: <span id="num-pedido">---</span>
         </div>
     </div>
 
-    <div id="exp-notice">⚠️ La suscripción de esta App ha vencido. <br> Contacte al desarrollador (Vibras Positivas).</div>
+    <div id="exp-notice">
+        ⚠️ ATENCIÓN: La suscripción de esta aplicación ha caducado.<br>
+        Por favor, contacte al desarrollador para renovar el servicio.
+    </div>
 
     <form id="orderForm">
         <h3>Datos del Cliente</h3>
         <div class="form-group">
-            <label>Nombre del Cliente / Propietario</label>
-            <input type="text" id="cliente" placeholder="Nombre completo" required>
+            <label>Nombre del Cliente</label>
+            <input type="text" id="cliente" required placeholder="Nombre de quien recibe">
         </div>
         <div class="form-group">
             <label>Nombre de la Tienda / Negocio</label>
-            <input type="text" id="tienda" placeholder="Ej: Supermercado El Éxito" required>
+            <input type="text" id="tienda" required placeholder="Nombre del establecimiento">
         </div>
         <div class="form-group">
-            <label>Dirección de Entrega</label>
-            <input type="text" id="direccion" placeholder="Calle, Carrera, Barrio" required>
+            <label>Dirección</label>
+            <input type="text" id="direccion" required placeholder="Calle, carrera y barrio">
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div class="form-group">
                 <label>Celular</label>
-                <input type="tel" id="celular" placeholder="310..." required>
+                <input type="tel" id="celular" required placeholder="Número de contacto">
             </div>
             <div class="form-group">
                 <label>Forma de Pago</label>
@@ -89,69 +91,71 @@
             </div>
         </div>
 
-        <h3>Selección de Productos</h3>
+        <h3>Productos</h3>
         <div class="product-list">
             <div class="product-header">
-                <div>Descripción</div>
+                <div>Producto</div>
                 <div>Unidad</div>
-                <div>Cant.</div>
+                <div>Cantidad</div>
                 <div>Subtotal</div>
             </div>
             
             <div class="product-row">
-                <div class="product-name">Arepa de Maíz (Tela)</div>
+                <div class="product-name">Arepa de Maíz (Blanca)</div>
                 <div style="font-size: 0.8em; color: #666;">Paquete</div>
-                <input type="number" class="qty-input qty" data-name="Arepa de Maíz" data-price="5000" value="0" min="0" oninput="calculate()">
+                <input type="number" class="qty-input qty" data-name="Arepa de Maíz Blanca" data-price="5000" value="0" min="0" oninput="calculate()">
                 <div class="subtotal">$0</div>
             </div>
 
             <div class="product-row">
                 <div class="product-name">Arepa con Queso</div>
-                <div style="font-size: 0.8em; color: #666;">Unidad</div>
-                <input type="number" class="qty-input qty" data-name="Arepa con Queso" data-price="2500" value="0" min="0" oninput="calculate()">
+                <div style="font-size: 0.8em; color: #666;">Paquete</div>
+                <input type="number" class="qty-input qty" data-name="Arepa con Queso" data-price="7500" value="0" min="0" oninput="calculate()">
                 <div class="subtotal">$0</div>
             </div>
         </div>
 
         <div class="form-group" style="margin-top: 15px;">
-            <label>Observaciones del Pedido</label>
-            <textarea id="obs" rows="2" placeholder="Ej: Dejar en portería, traer cambio de 50mil..."></textarea>
+            <label>Observaciones</label>
+            <textarea id="obs" rows="2" placeholder="Notas adicionales del pedido..."></textarea>
         </div>
 
         <div class="total-box">
-            <span style="font-weight: bold; color: #555;">TOTAL DEL PEDIDO:</span><br>
+            <span style="font-weight: bold; color: #555;">VALOR TOTAL:</span><br>
             <strong class="grand-total">$ <span id="total-val">0</span></strong>
         </div>
 
         <button type="button" class="btn-whatsapp" onclick="enviarPedido()">
-            🚀 ENVIAR PEDIDO POR WHATSAPP
+            ✅ ENVIAR PEDIDO POR WHATSAPP
         </button>
     </form>
 
     <div class="footer">
-        App desarrollada por <span class="vibras-tag">Vibras Positivas</span><br>
-        © Derechos de Autor Reservados<br>
+        App desarrollada por <strong>Vibras Positivas</strong><br>
+        Derechos de Autor Reservados © 2026<br>
         <span id="fecha-colombia"></span>
     </div>
 </div>
 
 <script>
-    // --- CONTROL DE SUBSCRIPCIÓN ---
-    const FECHA_EXP = new Date('2027-02-12'); // Fecha de vencimiento
-    const hoy = new Date();
-    if (hoy > FECHA_EXP) {
+    // --- CONTROL INVISIBLE DE SUSCRIPCIÓN ---
+    const FECHA_VENCE = new Date('2027-02-12'); // Expira en 1 año
+    const fechaHoy = new Date();
+
+    if (fechaHoy > FECHA_VENCE) {
         document.getElementById('orderForm').style.display = 'none';
         document.getElementById('exp-notice').style.display = 'block';
     }
 
-    // --- NÚMERO DE PEDIDO Y FECHA ---
-    const pedidoID = "OLI-" + Math.floor(1000 + Math.random() * 9000);
-    document.getElementById('num-pedido').innerText = pedidoID;
+    // --- NÚMERO DE PEDIDO ---
+    const idPedido = "OLI-" + Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('num-pedido').innerText = idPedido;
 
-    const options = { timeZone: 'America/Bogota', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-    document.getElementById('fecha-colombia').innerText = "Colombia: " + hoy.toLocaleDateString('es-CO', options);
+    // --- HORA REAL COLOMBIA ---
+    const localTime = new Date().toLocaleString("es-CO", {timeZone: "America/Bogota", hour12: true});
+    document.getElementById('fecha-colombia').innerText = "Fecha/Hora: " + localTime;
 
-    // --- LÓGICA DE CÁLCULO ---
+    // --- CÁLCULOS EN VIVO ---
     function calculate() {
         let total = 0;
         const rows = document.querySelectorAll('.product-row');
@@ -166,52 +170,59 @@
         document.getElementById('total-val').innerText = total.toLocaleString();
     }
 
-    // --- ENVÍO A WHATSAPP ---
+    // --- FUNCIÓN DE ENVÍO FORMATEADA ---
     function enviarPedido() {
         const cliente = document.getElementById('cliente').value;
         const tienda = document.getElementById('tienda').value;
         const direccion = document.getElementById('direccion').value;
         const cel = document.getElementById('celular').value;
         const pago = document.getElementById('pago').value;
-        const total = document.getElementById('total-val').innerText;
+        const totalF = document.getElementById('total-val').innerText;
         const obs = document.getElementById('obs').value || "Ninguna";
 
-        if(!cliente || !tienda || !direccion) {
-            alert("Por favor, completa los datos del cliente.");
+        if(!cliente || !tienda || !direccion || !cel) {
+            alert("Por favor completa los datos del cliente");
             return;
         }
 
-        let mensaje = `*PEDIDO NUEVO: ${pedidoID}*\n`;
+        let mensaje = `*PEDIDO NUEVO: ${idPedido}*\n`;
         mensaje += `--------------------------\n`;
         mensaje += `👤 *Cliente:* ${cliente}\n`;
         mensaje += `🏪 *Tienda:* ${tienda}\n`;
         mensaje += `📍 *Dirección:* ${direccion}\n`;
         mensaje += `📞 *Celular:* ${cel}\n`;
-        mensaje += `💳 *Pago:* ${pago}\n`;
         mensaje += `--------------------------\n`;
-        mensaje += `*PRODUCTOS:*\n`;
+        mensaje += `*DETALLE DEL PEDIDO:*\n\n`;
 
         const inputs = document.querySelectorAll('.qty');
-        let hayProductos = false;
+        let checkItems = false;
+
         inputs.forEach(input => {
-            if(parseInt(input.value) > 0) {
-                mensaje += `✅ ${input.value} x ${input.getAttribute('data-name')}\n`;
-                hayProductos = true;
+            const c = parseInt(input.value);
+            if(c > 0) {
+                const n = input.getAttribute('data-name');
+                const p = parseInt(input.getAttribute('data-price'));
+                const s = p * c;
+                // Desglose: Cant x Unitario = Subtotal
+                mensaje += `🔸 *${n}*\n`;
+                mensaje += `   ${c} und. x $${p.toLocaleString()} = *$${s.toLocaleString()}*\n\n`;
+                checkItems = true;
             }
         });
 
-        if(!hayProductos) {
-            alert("No has seleccionado ningún producto.");
+        if(!checkItems) {
+            alert("Debes agregar al menos un producto");
             return;
         }
 
         mensaje += `--------------------------\n`;
         mensaje += `📝 *Obs:* ${obs}\n`;
-        mensaje += `💰 *TOTAL A COBRAR: $${total}*\n\n`;
-        mensaje += `_Generado por Vibras Positivas_`;
+        mensaje += `💳 *Forma de Pago:* ${pago}\n`;
+        mensaje += `💰 *TOTAL A PAGAR: $${totalF}*\n\n`;
+        mensaje += `_App desarrollada por Vibras Positivas_`;
 
-        const url = `https://wa.me/573135370683?text=${encodeURIComponent(mensaje)}`;
-        window.open(url, '_blank');
+        const link = `https://wa.me/573135370683?text=${encodeURIComponent(mensaje)}`;
+        window.open(link, '_blank');
     }
 </script>
 
