@@ -1,1 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos - Arepas Campesinas Oli</title>
+    <style>
+        :root {
+            --primary: #004a99;
+            --secondary: #25d366;
+            --light: #f4f7f6;
+        }
+        body { font-family: Arial, sans-serif; background: var(--light); margin: 0; padding: 20px; }
+        .container { max-width: 600px; background: white; margin: auto; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .header { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+        .logo-vibras { width: 80px; float: right; }
+        h2 { color: var(--primary); margin: 10px 0; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .product-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 10px; padding: 5px; border-bottom: 1px solid #eee; }
+        .total-section { background: #e9f0f7; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: right; }
+        .btn-send { background: var(--secondary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-size: 1.1em; cursor: pointer; font-weight: bold; margin-top: 15px; }
+        .footer { text-align: center; font-size: 0.8em; color: #666; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 10px; }
+        #exp-notice { color: red; text-align: center; display: none; font-weight: bold; }
+    </style>
+</head>
+<body>
 
+<div class="container" id="app-content">
+    <div class="header">
+        <h2>AREPAS CAMPESINAS OLI</h2>
+        <p>Caucasia, Antioquia | Tel: 3135370683</p>
+        <div id="order-info" style="font-weight: bold;">Pedido N°: <span id="num-pedido"></span></div>
+    </div>
+
+    <div id="exp-notice">Suscripción vencida. Contacte a Vibras Positivas.</div>
+
+    <form id="orderForm">
+        <h3>Datos del Cliente</h3>
+        <div class="form-group">
+            <label>Nombre del Cliente / Tienda</label>
+            <input type="text" id="cliente" required placeholder="Ej: Tienda La Esquina">
+        </div>
+        <div class="form-group">
+            <label>Dirección</label>
+            <input type="text" id="direccion" required>
+        </div>
+        <div class="form-group">
+            <label>Celular</label>
+            <input type="tel" id="celular" required>
+        </div>
+        <div class="form-group">
+            <label>Forma de Pago</label>
+            <select id="pago">
+                <option value="Efectivo">Efectivo</option>
+                <option value="Transferencia">Transferencia</option>
+                <option value="Nequi">Nequi</option>
+            </select>
+        </div>
+
+        <h3>Productos</h3>
+        <div class="product-row" style="font-weight: bold;">
+            <div>Producto</div><div>Cant.</div><div>Valor</div><div>Subtotal</div>
+        </div>
+        
+        <div class="product-row">
+            <div>Arepa de Tela (Paquete)</div>
+            <input type="number" class="qty" data-price="5000" min="0" value="0" oninput="calculateTotal()">
+            <div>$5.000</div>
+            <div class="subtotal">$0</div>
+        </div>
+
+        <div class="product-row">
+            <div>Arepa con Queso</div>
+            <input type="number" class="qty" data-price="7500" min="0" value="0" oninput="calculateTotal()">
+            <div>$7.500</div>
+            <div class="subtotal">$0</div>
+        </div>
+
+        <div class="form-group">
+            <label>Observaciones</label>
+            <textarea id="obs" rows="2"></textarea>
+        </div>
+
+        <div class="total-section">
+            <strong>TOTAL A PAGAR: $<span id="grand-total">0</span></strong>
+        </div>
+
+        <button type="button" class="btn-send" onclick="sendWhatsApp()">ENVIAR PEDIDO POR WHATSAPP</button>
+    </form>
+
+    <div class="footer">
+        <p>App desarrollada por <strong>Vibras Positivas</strong> © Todos los derechos reservados.</p>
+        <p id="fecha-actual"></p>
+    </div>
+</div>
+
+<script>
+    // --- CONTROL DE SUBSCRIPCIÓN (Invisible) ---
+    const FECHA_VENCIMIENTO = new Date('2026-12-31'); // Cambia esta fecha según necesites
+    const hoy = new Date();
+
+    if (hoy > FECHA_VENCIMIENTO) {
+        document.getElementById('orderForm').style.display = 'none';
+        document.getElementById('exp-notice').style.display = 'block';
+    }
+
+    // --- GENERADOR DE NÚMERO DE PEDIDO ---
+    const numPedido = Math.floor(Math.random() * 10000) + 1;
+    document.getElementById('num-pedido').innerText = 'AC-' + numPedido;
+    
+    // --- FECHA Y HORA COLOMBIA ---
+    const opciones = { timeZone: 'America/Bogota', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    document.getElementById('fecha-actual').innerText = hoy.toLocaleDateString('es-CO', opciones);
+
+    function calculateTotal() {
+        let grandTotal = 0;
+        const rows = document.querySelectorAll('.product-row');
+        
+        rows.forEach(row => {
+            const qtyInput = row.querySelector('.qty');
+            if(qtyInput) {
+                const price = parseInt(qtyInput.getAttribute('data-price'));
+                const qty = parseInt(qtyInput.value) || 0;
+                const subtotal = price * qty;
+                row.querySelector('.subtotal').innerText = '$' + subtotal.toLocaleString();
+                grandTotal += subtotal;
+            }
+        });
+        document.getElementById('grand-total').innerText = grandTotal.toLocaleString();
+    }
+
+    function sendWhatsApp() {
+        const cliente = document.getElementById('cliente').value;
+        const direccion = document.getElementById('direccion').value;
+        const pago = document.getElementById('pago').value;
+        const total = document.getElementById('grand-total').innerText;
+        const nPedido = document.getElementById('num-pedido').innerText;
+        
+        if(!cliente || !direccion) { alert("Por favor llene los datos del cliente"); return; }
+
+        let mensaje = `*PEDIDO: ${nPedido}*\n`;
+        mensaje += `--------------------------\n`;
+        mensaje += `*Cliente:* ${cliente}\n`;
+        mensaje += `*Dirección:* ${direccion}\n`;
+        mensaje += `*Pago:* ${pago}\n`;
+        mensaje += `--------------------------\n`;
+        mensaje += `*PRODUCTOS:*\n`;
+
+        const rows = document.querySelectorAll('.product-row');
+        rows.forEach(row => {
+            const qtyInput = row.querySelector('.qty');
+            if(qtyInput && qtyInput.value > 0) {
+                const nombre = row.cells ? row.cells[0].innerText : row.querySelector('div').innerText;
+                mensaje += `- ${qtyInput.value} x ${nombre}\n`;
+            }
+        });
+
+        mensaje += `--------------------------\n`;
+        mensaje += `*TOTAL: $${total}*\n`;
+        mensaje += `--------------------------\n`;
+        mensaje += `_Enviado desde App Arepas Oli_`;
+
+        const fletch_url = `https://wa.me/573135370683?text=${encodeURIComponent(mensaje)}`;
+        window.open(fletch_url, '_blank');
+    }
+</script>
+
+</body>
+</html>
