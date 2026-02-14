@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pedidos - Arepas Campesinas Oli</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
             --primary: #004a99;
@@ -20,6 +21,11 @@
         
         h2 { color: var(--primary); margin: 5px 0; letter-spacing: 1px; }
         .info-contacto { font-size: 0.9em; color: #555; margin-bottom: 10px; }
+
+        /* QR Section */
+        .qr-container { background: #fff; padding: 15px; display: flex; flex-direction: column; align-items: center; border: 1px dashed #ccc; margin-bottom: 20px; border-radius: 10px; }
+        #qrcode { margin-bottom: 10px; }
+        .qr-text { font-size: 0.7em; color: #666; font-weight: bold; }
 
         /* Estilos de Formulario */
         h3 { border-left: 5px solid var(--accent); padding-left: 10px; color: #333; font-size: 1.1em; margin-top: 25px; }
@@ -52,14 +58,20 @@
         <img src="arepas-campesinas-oli.png" alt="Logo Arepas Oli" class="logo-principal">
         <h2>AREPAS CAMPESINAS OLI</h2>
         <div class="info-contacto">📍 Caucasia, Antioquia | 📱 3135370683</div>
-        <div style="background: #f0f0f0; display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.85em; font-weight: bold;">
-            Pedido N°: <span id="num-pedido">---</span>
-        </div>
+    </div>
+
+    <div class="qr-container">
+        <div id="qrcode"></div>
+        <div class="qr-text">ESCANEA PARA PEDIR DESDE TU CELULAR</div>
+    </div>
+
+    <div style="text-align: center; background: #f0f0f0; padding: 5px 15px; border-radius: 20px; font-size: 0.85em; font-weight: bold; margin-bottom: 20px;">
+        Pedido N°: <span id="num-pedido">---</span>
     </div>
 
     <div id="exp-notice">
         ⚠️ ATENCIÓN: La suscripción de esta aplicación ha caducado.<br>
-        Por favor, contacte al desarrollador para renovar el servicio.
+        Por favor, contacte al desarrollador (Vibras Positivas).
     </div>
 
     <form id="orderForm">
@@ -117,7 +129,7 @@
 
         <div class="form-group" style="margin-top: 15px;">
             <label>Observaciones</label>
-            <textarea id="obs" rows="2" placeholder="Notas adicionales del pedido..."></textarea>
+            <textarea id="obs" rows="2" placeholder="Notas adicionales..."></textarea>
         </div>
 
         <div class="total-box">
@@ -138,8 +150,19 @@
 </div>
 
 <script>
-    // --- CONTROL INVISIBLE DE SUSCRIPCIÓN ---
-    const FECHA_VENCE = new Date('2027-02-12'); // Expira en 1 año
+    // --- GENERAR CÓDIGO QR AUTOMÁTICO ---
+    // Detecta la URL actual para que el QR siempre funcione
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: window.location.href,
+        width: 128,
+        height: 128,
+        colorDark : "#004a99",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+
+    // --- CONTROL DE SUBSCRIPCIÓN ---
+    const FECHA_VENCE = new Date('2027-02-12'); 
     const fechaHoy = new Date();
 
     if (fechaHoy > FECHA_VENCE) {
@@ -151,11 +174,10 @@
     const idPedido = "OLI-" + Math.floor(1000 + Math.random() * 9000);
     document.getElementById('num-pedido').innerText = idPedido;
 
-    // --- HORA REAL COLOMBIA ---
+    // --- HORA COLOMBIA ---
     const localTime = new Date().toLocaleString("es-CO", {timeZone: "America/Bogota", hour12: true});
     document.getElementById('fecha-colombia').innerText = "Fecha/Hora: " + localTime;
 
-    // --- CÁLCULOS EN VIVO ---
     function calculate() {
         let total = 0;
         const rows = document.querySelectorAll('.product-row');
@@ -170,7 +192,6 @@
         document.getElementById('total-val').innerText = total.toLocaleString();
     }
 
-    // --- FUNCIÓN DE ENVÍO FORMATEADA ---
     function enviarPedido() {
         const cliente = document.getElementById('cliente').value;
         const tienda = document.getElementById('tienda').value;
@@ -203,7 +224,6 @@
                 const n = input.getAttribute('data-name');
                 const p = parseInt(input.getAttribute('data-price'));
                 const s = p * c;
-                // Desglose: Cant x Unitario = Subtotal
                 mensaje += `🔸 *${n}*\n`;
                 mensaje += `   ${c} und. x $${p.toLocaleString()} = *$${s.toLocaleString()}*\n\n`;
                 checkItems = true;
@@ -217,7 +237,7 @@
 
         mensaje += `--------------------------\n`;
         mensaje += `📝 *Obs:* ${obs}\n`;
-        mensaje += `💳 *Forma de Pago:* ${pago}\n`;
+        mensaje += `💳 *Pago:* ${pago}\n`;
         mensaje += `💰 *TOTAL A PAGAR: $${totalF}*\n\n`;
         mensaje += `_App desarrollada por Vibras Positivas_`;
 
